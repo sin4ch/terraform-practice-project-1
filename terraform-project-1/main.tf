@@ -72,24 +72,24 @@ resource "aws_vpc_security_group_ingress_rule" "allow_https_ipv4" {
   cidr_ipv4         = aws_vpc.my_first_vpc.cidr_block
   description = "Allow HTTPS inbound traffic"
   from_port         = 443
-  ip_protocol       = "tcp"
   to_port           = 443
+    ip_protocol       = "tcp"
 }
 resource "aws_vpc_security_group_ingress_rule" "allow_http_ipv4" {
   security_group_id = aws_security_group.my_first_security_group.id
   cidr_ipv4         = aws_vpc.my_first_vpc.cidr_block
   description = "Allow HTTP inbound traffic"
   from_port         = 80
-  ip_protocol       = "tcp"
   to_port           = 80
+  ip_protocol       = "tcp"
 }
 resource "aws_vpc_security_group_ingress_rule" "allow_ssh_ipv4" {
   security_group_id = aws_security_group.my_first_security_group.id
   cidr_ipv4         = aws_vpc.my_first_vpc.cidr_block
   description = "Allow SSH inbound traffic"
   from_port         = 22
-  ip_protocol       = "tcp"
   to_port           = 22
+  ip_protocol       = "tcp"
 }
 
 # Security group egress rules for IPv4
