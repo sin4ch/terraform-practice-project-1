@@ -20,12 +20,12 @@ resource "aws_vpc" "my_first_vpc" {
 
 # Internet gateway
 resource "aws_internet_gateway" "my_first_gw" {
-  vpc = aws_vpc.my_first_vpc.id
+  vpc_id = aws_vpc.my_first_vpc.id
 }
 
 # Route table
 resource "aws_route_table" "my_first_route_table" {
-  vpc_id = aws_vpc.default.id
+  vpc_id = aws_vpc.my_first_vpc.id
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.my_first_gw.id
@@ -41,7 +41,7 @@ resource "aws_route_table" "my_first_route_table" {
 
 # Subnet
 resource "aws_subnet" "subnet_1" {
-  vpc = aws_vpc.my_first_vpc.id
+  vpc_id = aws_vpc.my_first_vpc.id
   cidr_block = "10.0.1.0/24"
   availability_zone = "us-east-1a" 
   tags = {
