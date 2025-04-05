@@ -5,9 +5,13 @@ provider aws {
 # ----------------------------------------------
 # TERRAFORM PROJECT: SETTING UP AN AWS INFRA
 # Create vpc
-# Create subnet
 # Create route table
 # Create internet gateway
+# Create subnet
+# Create route table association
+# Create security group
+# Create security group ingress rules
+# Create security group egress rules
 # ----------------------------------------------
 
 # VPC
@@ -55,7 +59,6 @@ resource "aws_route_table_association" "my_route_table_" {
   route_table_id = aws_route_table.my_first_route_tabler.id
 }
 
-
 # Security Group
 resource "aws_security_group" "my_first_security_group" {
   name        = "allow_tls"
@@ -67,31 +70,71 @@ resource "aws_security_group" "my_first_security_group" {
   }
 }
 
-resource "aws_vpc_security_group_ingress_rule" "allow_tls_ipv4" {
-  security_group_id = aws_security_group.allow_tls.id
+# Security group ingress rules for IPv4
+resource "aws_vpc_security_group_ingress_rule" "allow_https_ipv4" {
+  security_group_id = aws_security_group.my_first_security_group.id
   cidr_ipv4         = aws_vpc.my_first_vpc.cidr_block
+  description = "Allow HTTPS inbound traffic"
   from_port         = 443
   ip_protocol       = "tcp"
   to_port           = 443
 }
+resource "aws_vpc_security_group_ingress_rule" "allow_http_ipv4" {
+  security_group_id = aws_security_group.my_first_security_group.id
+  cidr_ipv4         = aws_vpc.my_first_vpc.cidr_block
+  description = "Allow HTTP inbound traffic"
+  from_port         = 80
+  ip_protocol       = "tcp"
+  to_port           = 80
+}
+resource "aws_vpc_security_group_ingress_rule" "allow_ssh_ipv4" {
+  security_group_id = aws_security_group.my_first_security_group.id
+  cidr_ipv4         = aws_vpc.my_first_vpc.cidr_block
+  description = "Allow SSH inbound traffic"
+  from_port         = 22
+  ip_protocol       = "tcp"
+  to_port           = 22
+}
 
-resource "aws_vpc_security_group_ingress_rule" "allow_tls_ipv6" {
-  security_group_id = aws_security_group.allow_tls.id
+# Security group ingress rules for IPv6
+resource "aws_vpc_security_group_ingress_rule" "allow_https_ipv6" {
+  security_group_id = aws_security_group.my_first_security_group.id
   cidr_ipv6         = aws_vpc.my_first_vpc.ipv6_cidr_block
+  description = "Allow HTTPS inbound traffic for IPv6"
   from_port         = 443
   ip_protocol       = "tcp"
   to_port           = 443
 }
+resource "aws_vpc_security_group_ingress_rule" "allow_http_ipv6" {
+  security_group_id = aws_security_group.my_first_security_group.id
+  cidr_ipv6         = aws_vpc.my_first_vpc.ipv6_cidr_block
+  description = "Allow HTTP inbound traffic for IPv6"
+  from_port         = 80
+  ip_protocol       = "tcp"
+  to_port           = 80
+}
+resource "aws_vpc_security_group_ingress_rule" "allow_ssh_ipv6" {
+  security_group_id = aws_security_group.my_first_security_group.id
+  cidr_ipv6         = aws_vpc.my_first_vpc.ipv6_cidr_block
+  description = "Allow SSH inbound traffic for IPv6"
+  from_port         = 22
+  ip_protocol       = "tcp"
+  to_port           = 22
+}
 
+# Security group egress rules for IPv4
 resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
-  security_group_id = aws_security_group.allow_tls.id
+  security_group_id = aws_security_group.my_first_security_group.id
   cidr_ipv4         = aws_vpc.my_first_vpc.cidr_block
+  description = "Allow all outbound traffic"
   ip_protocol       = "-1" # semantically equivalent to all ports
 }
 
+# Security group egress rules for IPv6
 resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv6" {
-  security_group_id = aws_security_group.allow_tls.id
+  security_group_id = aws_security_group.my_first_security_group.id
   cidr_ipv6         = "::/0"
+  description = "Allow all outbound traffic for IPv6"
   ip_protocol       = "-1" # semantically equivalent to all ports
 }
 
