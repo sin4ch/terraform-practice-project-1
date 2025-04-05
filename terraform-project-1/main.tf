@@ -55,6 +55,7 @@ resource "aws_route_table_association" "my_route_table_" {
   route_table_id = aws_route_table.my_first_route_tabler.id
 }
 
+
 # Security Group
 resource "aws_security_group" "my_first_security_group" {
   name        = "allow_tls"
